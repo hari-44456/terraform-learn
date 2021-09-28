@@ -8,4 +8,4 @@ terraform.tfstate.*
 
 
 # terraform var-file may include sensitive data
-terraform-dev.tfvars
+terraform.tfvars

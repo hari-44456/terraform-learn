@@ -1,44 +1,38 @@
 provider "aws" {
     region = "us-east-2"
     // if not specified here then we have to set it via ennvironment variable or run aws configure
-    # access_key = "AKIAZOLLOARNLWP2MXOK"
-    # secret_key = "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"
+    # access_key = ""
+    # secret_key = ""
 }
 
-
-resource "aws_vpc" "development-env-vpc" {
-    cidr_block = var.cidr_blocks[0].cidr_block
-    tags = {
-        Name = var.cidr_blocks[0].name
-    }
-}
-
-variable "cidr_blocks" {
-    description = "cidr blocks and name tags for vpc and subnet"
-    type = list(object({
-        cidr_block = string,
-        name = string
-    }))
-}
-
-variable avail_zone{
+variable vpc_cidr_block {}
+variable subnet_cidr_block {}
+variable env_prefix {}
+variable avail_zone {
     // this variable is declared using EXPORT TF_VAR_avail_var=us-east-2a on BASH
     // this is a custom environment variable
 }
 
-resource "aws_subnet" "dev-subnet-1" {
-    vpc_id = aws_vpc.development-env-vpc.id 
-    cidr_block = var.cidr_blocks[1].cidr_block
+resource "aws_vpc" "myapp-vpc" {
+    cidr_block = var.vpc_cidr_block
+    tags = {
+        Name = "${var.env_prefix}-voc"
+    }
+}
+
+resource "aws_subnet" "myapp-subnet-1" {
+    vpc_id = aws_vpc.myapp-vpc.id 
+    cidr_block = var.subnet_cidr_block
     availability_zone = var.avail_zone
     tags = {
-        Name = var.cidr_blocks[1].name
+        Name = "${var.env_prefix}-subnet-1"
     }
 }
 
 output "dev-vpc-id" {
-    value = aws_vpc.development-env-vpc.id
+    value = aws_vpc.myapp-vpc.id
 }
 
 output "dev-subnet-id" {
-    value = aws_subnet.dev-subnet-1.id
+    value = aws_subnet.myapp-subnet-1.id
 }
