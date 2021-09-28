@@ -12,6 +12,7 @@ variable avail_zone {
     // this variable is declared using EXPORT TF_VAR_avail_var=us-east-2a on BASH
     // this is a custom environment variable
 }
+variable my_ip {}
 
 resource "aws_vpc" "myapp-vpc" {
     cidr_block = var.vpc_cidr_block
@@ -47,5 +48,25 @@ resource "aws_default_route_table" "main-rtb" {
 
     tags = {
         Name = "${var.env_prefix}-main-rtb"
+    }
+}
+
+resource aws_security_group "myapp-sg" {
+    name = "myapp-sg"
+    vpc_id = aws_vpc.myapp-vpc.id
+
+    // ingress for incoming traffic
+    ingress {
+        from_port = 22
+        to_port = 22
+        protocol = "tcp"
+        cidr_block = [var.my_ip]
+    }
+
+    ingress {
+        from_port = 8080
+        to_port = 8080
+        protocol = "tcp"
+        cidr_block = ["0.0.0.0/0"]
     }
 }
