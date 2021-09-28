@@ -75,7 +75,7 @@ resource aws_security_group "myapp-sg" {
         to_port = 0
         protocol = "-1"
         cidr_blocks = ["0.0.0.0/0"]
-        prefix_list_ids = [""]
+        prefix_list_ids = []
     }
 
     tags = {
