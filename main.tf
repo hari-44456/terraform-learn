@@ -77,4 +77,8 @@ resource aws_security_group "myapp-sg" {
         cidr_block = ["0.0.0.0/0"]
         prefix_list_ids = [""]
     }
+
+    tags = {
+        Name = "${var.env_prefix}-sg"
+    }
 }
