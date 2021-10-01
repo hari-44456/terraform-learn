@@ -1,0 +1,9 @@
+variable vpc_id {}
+variable env_prefix {}
+variable ssh_public_key_file_location {}
+variable ssh_private_key_file_location {}
+variable instance_type {}
+variable avail_zone {}
+variable image_name {}
+variable subnet_id {}
+variable my_ip {}
